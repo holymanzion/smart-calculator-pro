@@ -53,6 +53,13 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+
+            // Compose pulls in prebuilt native libraries (androidx.graphics:graphics-path).
+            // Shipping their symbol table makes any native crash readable in Play Console
+            // instead of a bare address, and silences Play's upload warning.
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
