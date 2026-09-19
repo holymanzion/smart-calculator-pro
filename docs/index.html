@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Calculator Pro</title>
+<meta name="description" content="An offline Android calculator with a scientific keypad, unit converter, and discount, price, loan, percentage, date and BMI tools.">
+<style>
+  :root {
+    --bg: #fdfbff;
+    --surface: #f3edf7;
+    --text: #1c1b1f;
+    --muted: #49454f;
+    --accent: #6750a4;
+    --border: #cac4d0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141218;
+      --surface: #211f26;
+      --text: #e6e0e9;
+      --muted: #cac4d0;
+      --accent: #d0bcff;
+      --border: #49454f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 48px 16px 64px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, Roboto, "Segoe UI", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+  header { text-align: center; margin-bottom: 40px; }
+  .mark {
+    width: 84px; height: 84px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #7c6bd4, #4a3691);
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .mark svg { width: 52px; height: 52px; }
+  h1 { font-size: 2rem; margin: 0 0 6px; }
+  .tagline { color: var(--muted); margin: 0; }
+  h2 { font-size: 1.2rem; margin: 36px 0 10px; color: var(--accent); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .card strong { display: block; margin-bottom: 2px; }
+  .card span { color: var(--muted); font-size: 0.9rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+  .links a {
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .links a.secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+  footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.88rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="mark">
+    <svg viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path fill="#fff" d="M40,28 h28 a6,6 0 0 1 6,6 v40 a6,6 0 0 1 -6,6 h-28 a6,6 0 0 1 -6,-6 v-40 a6,6 0 0 1 6,-6 z"/>
+      <path fill="#4a3691" d="M41,34 h26 a2,2 0 0 1 2,2 v8 a2,2 0 0 1 -2,2 h-26 a2,2 0 0 1 -2,-2 v-8 a2,2 0 0 1 2,-2 z"/>
+      <path fill="#6750a4" d="M40,51 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z M52,51 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z M64,51 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z M40,61 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z M52,61 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z M64,61 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z M40,71 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z M52,71 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z"/>
+      <path fill="#ffb865" d="M64,71 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 z"/>
+    </svg>
+  </div>
+  <h1>Smart Calculator Pro</h1>
+  <p class="tagline">A calculator and a box of everyday tools. Entirely offline.</p>
+</header>
+
+<div class="links">
+  <a href="privacy_policy.html">Privacy Policy</a>
+  <a class="secondary" href="terms.html">Terms &amp; Conditions</a>
+</div>
+
+<h2>What it does</h2>
+<div class="grid">
+  <div class="card"><strong>Calculator</strong><span>Basic and scientific, with a real expression parser, live preview and history</span></div>
+  <div class="card"><strong>Unit Converter</strong><span>Ten categories, from length and mass to digital storage and pressure</span></div>
+  <div class="card"><strong>Discount</strong><span>Sale price, stacked discounts and what you actually save</span></div>
+  <div class="card"><strong>Price &amp; Bill</strong><span>Tax, tip and splitting a bill between people</span></div>
+  <div class="card"><strong>Loan / EMI</strong><span>Monthly repayment, total interest and total payable</span></div>
+  <div class="card"><strong>Percentage</strong><span>Percent of, what percent, and percentage change</span></div>
+  <div class="card"><strong>Date Calculator</strong><span>Difference between dates, and adding or subtracting time</span></div>
+  <div class="card"><strong>BMI</strong><span>Body mass index in metric or imperial, with healthy weight range</span></div>
+</div>
+
+<h2>Privacy</h2>
+<p>
+  The app does not request the Android <code>INTERNET</code> permission, so it cannot
+  send data anywhere — the operating system enforces this. No analytics, no advertising,
+  no trackers. History and settings live only on your device.
+</p>
+
+<footer>
+  Built with Kotlin and Jetpack Compose.
+</footer>
+
+</body>
+</html>

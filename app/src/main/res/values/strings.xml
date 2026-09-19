@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Calculator Pro</string>
+
+    <string name="cd_history">History</string>
+    <string name="cd_clear_history">Clear history</string>
+    <string name="cd_backspace">Backspace</string>
+    <string name="cd_scientific">Toggle scientific keypad</string>
+    <string name="cd_angle_mode">Toggle degrees and radians</string>
+
+    <string name="history_empty">No calculations yet</string>
+    <string name="history_title">History</string>
+    <string name="copied">Copied to clipboard</string>
+
+    <!-- Spoken labels for keys whose glyph does not read well aloud. -->
+    <string name="cd_add">Plus</string>
+    <string name="cd_subtract">Minus</string>
+    <string name="cd_multiply">Multiply</string>
+    <string name="cd_divide">Divide</string>
+    <string name="cd_equals">Equals</string>
+    <string name="cd_clear">Clear all</string>
+    <string name="cd_decimal">Decimal point</string>
+    <string name="cd_percent">Percent</string>
+    <string name="cd_toggle_sign">Change sign</string>
+    <string name="cd_power">Raise to a power</string>
+    <string name="cd_square">Square</string>
+    <string name="cd_factorial">Factorial</string>
+    <string name="cd_parenthesis">Bracket</string>
+    <string name="cd_second_function">Alternate functions</string>
+    <string name="cd_pi">Pi</string>
+    <string name="cd_euler">Euler\'s number</string>
+    <string name="cd_answer">Previous answer</string>
+    <string name="cd_square_root">Square root</string>
+    <string name="cd_cube_root">Cube root</string>
+    <string name="cd_exponent">Exponent</string>
+    <string name="cd_absolute">Absolute value</string>
+    <string name="cd_natural_log">Natural logarithm</string>
+    <string name="cd_log">Logarithm base ten</string>
+    <string name="cd_power_of_ten">Ten to the power</string>
+    <string name="cd_exp_function">E to the power</string>
+
+    <string name="error_syntax">Syntax error</string>
+    <string name="error_division_by_zero">Cannot divide by zero</string>
+    <string name="error_domain">Undefined for that value</string>
+    <string name="error_overflow">Number is too large</string>
+    <string name="error_parens">Unbalanced brackets</string>
+</resources>
