@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
                     onDynamicColorChange = appViewModel::onDynamicColorChange,
                     onGroupDigitsChange = appViewModel::onGroupDigitsChange,
                     onHapticFeedbackChange = appViewModel::onHapticFeedbackChange,
+                    onCurrencySymbolChange = appViewModel::onCurrencySymbolChange,
                 )
             }
         }

@@ -24,15 +24,16 @@ import com.holymanzion.calculator.tools.UnitCategory
 import com.holymanzion.calculator.tools.convertUnits
 import com.holymanzion.calculator.ui.components.ChipSelector
 import com.holymanzion.calculator.ui.components.DropdownField
+import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.NumberField
 import com.holymanzion.calculator.ui.components.ResultCard
 import com.holymanzion.calculator.ui.components.ResultRow
 import com.holymanzion.calculator.ui.components.ToolNote
 import com.holymanzion.calculator.ui.components.ToolScaffold
-import com.holymanzion.calculator.ui.components.formatNumber
 
 @Composable
 fun UnitConverterScreen(onOpenMenu: () -> Unit) {
+    val format = LocalToolFormat.current
     var categoryOrdinal by rememberSaveable { mutableIntStateOf(0) }
     val category = UnitCategory.entries[categoryOrdinal]
     val units = UnitCatalog.unitsFor(category)
@@ -112,13 +113,13 @@ fun UnitConverterScreen(onOpenMenu: () -> Unit) {
                 )
             } else {
                 ResultRow(
-                    label = "${formatNumber(amount)} ${from.symbol}",
-                    value = "${formatNumber(converted)} ${to.symbol}",
+                    label = "${format.number(amount)} ${from.symbol}",
+                    value = "${format.number(converted)} ${to.symbol}",
                     emphasised = true,
                 )
                 ResultRow(
                     label = "1 ${from.symbol} equals",
-                    value = "${formatNumber(convertUnits(1.0, from, to))} ${to.symbol}",
+                    value = "${format.number(convertUnits(1.0, from, to))} ${to.symbol}",
                 )
             }
         }

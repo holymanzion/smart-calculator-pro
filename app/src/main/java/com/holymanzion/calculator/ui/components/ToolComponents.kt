@@ -1,5 +1,9 @@
 package com.holymanzion.calculator.ui.components
 
+import android.os.Build
+import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,14 +40,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.Currency
+import java.util.Locale
 
 /** Standard frame for a tool screen: app bar with the drawer button, scrolling body. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -227,15 +239,47 @@ fun ResultCard(
     }
 }
 
-/** One label/value line inside a [ResultCard]. */
+/**
+ * One label/value line inside a [ResultCard].
+ *
+ * Long-pressing copies the value. A result you cannot get out of the app is half a
+ * result, and a long-press adds the affordance without spending layout on a button
+ * beside every row.
+ */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ResultRow(
     label: String,
     value: String,
     emphasised: Boolean = false,
+    copyable: Boolean = true,
 ) {
+    val clipboard = LocalClipboardManager.current
+    val context = LocalContext.current
+    val haptics = LocalHapticFeedback.current
+
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(
+                if (copyable && value.isNotBlank() && value != "—") {
+                    Modifier.combinedClickable(
+                        onClick = {},
+                        onLongClick = {
+                            clipboard.setText(AnnotatedString(value))
+                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                            // Android 13+ shows its own clipboard confirmation; a
+                            // second toast would just be noise.
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                                Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        onLongClickLabel = "Copy $label",
+                    )
+                } else {
+                    Modifier
+                },
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -288,23 +332,56 @@ fun ToolNote(text: String) {
 // ---- number rendering ----------------------------------------------------
 
 /**
+ * Number rendering for the tool screens, carrying the user's currency and separator
+ * preferences.
+ *
+ * Supplied through [LocalToolFormat] rather than passed down as parameters: every
+ * screen formats numbers, so threading two settings through each one would add noise
+ * to signatures that are otherwise about the tool itself.
+ */
+class ToolFormat(
+    /** Prefix for money values. Empty means show the bare number. */
+    val currencySymbol: String = "",
+    val grouped: Boolean = true,
+) {
+    /** Fixed two decimal places, for money. */
+    fun money(value: Double?): String {
+        val rendered = formatMoney(value, grouped) ?: return "—"
+        return if (currencySymbol.isEmpty()) rendered else "$currencySymbol$rendered"
+    }
+
+    /** General-purpose number, trailing zeros removed. */
+    fun number(value: Double?, maxDecimals: Int = 6): String =
+        if (value == null) "—" else formatNumber(value, maxDecimals, grouped)
+}
+
+val LocalToolFormat = staticCompositionLocalOf { ToolFormat() }
+
+/** The currency symbol for the device's own locale, or empty when it has none. */
+fun defaultCurrencySymbol(): String = try {
+    Currency.getInstance(Locale.getDefault()).getSymbol(Locale.getDefault())
+} catch (_: IllegalArgumentException) {
+    // Some locales have no associated currency; a bare number is the right fallback.
+    ""
+}
+
+/**
  * Fixed two decimal places with thousands separators, for money.
  *
  * Accepts null so screens can pass a field that has not been filled in yet without
  * each call site repeating the same fallback.
  */
-fun formatMoney(value: Double?): String =
-    if (value == null || !value.isFinite()) {
-        "—"
-    } else {
-        groupInteger(BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).toPlainString())
-    }
+fun formatMoney(value: Double?, grouped: Boolean = true): String? {
+    if (value == null || !value.isFinite()) return null
+    val plain = BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).toPlainString()
+    return if (grouped) groupInteger(plain) else plain
+}
 
 /**
  * General number rendering: up to [maxDecimals] places, trailing zeros removed, with
  * separators. Keeps converted units readable without inventing false precision.
  */
-fun formatNumber(value: Double, maxDecimals: Int = 6): String {
+fun formatNumber(value: Double, maxDecimals: Int = 6, grouped: Boolean = true): String {
     if (!value.isFinite()) return "—"
 
     val scaled = BigDecimal.valueOf(value)
@@ -317,7 +394,8 @@ fun formatNumber(value: Double, maxDecimals: Int = 6): String {
         return scaled.round(java.math.MathContext(8)).toString()
     }
 
-    return groupInteger(scaled.toPlainString())
+    val plain = scaled.toPlainString()
+    return if (grouped) groupInteger(plain) else plain
 }
 
 /** Inserts thousands separators into the integer part of a plain decimal string. */

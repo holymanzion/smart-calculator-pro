@@ -23,6 +23,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -32,6 +33,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holymanzion.calculator.data.AppSettings
 import com.holymanzion.calculator.data.ThemeMode
+import com.holymanzion.calculator.ui.components.LocalToolFormat
+import com.holymanzion.calculator.ui.components.ToolFormat
+import com.holymanzion.calculator.ui.components.defaultCurrencySymbol
 import com.holymanzion.calculator.ui.tools.BmiScreen
 import com.holymanzion.calculator.ui.tools.DateScreen
 import com.holymanzion.calculator.ui.tools.DiscountScreen
@@ -55,6 +59,7 @@ fun SmartCalculatorApp(
     onDynamicColorChange: (Boolean) -> Unit,
     onGroupDigitsChange: (Boolean) -> Unit,
     onHapticFeedbackChange: (Boolean) -> Unit,
+    onCurrencySymbolChange: (String?) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -88,7 +93,18 @@ fun SmartCalculatorApp(
         destinationName = Destination.Calculator.name
     }
 
-    CompositionLocalProvider(LocalHapticsEnabled provides settings.hapticFeedback) {
+    // Resolved here rather than stored, so a device language change is picked up.
+    val toolFormat = remember(settings.currencySymbol, settings.groupDigits) {
+        ToolFormat(
+            currencySymbol = settings.currencySymbol ?: defaultCurrencySymbol(),
+            grouped = settings.groupDigits,
+        )
+    }
+
+    CompositionLocalProvider(
+        LocalHapticsEnabled provides settings.hapticFeedback,
+        LocalToolFormat provides toolFormat,
+    ) {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -149,6 +165,7 @@ fun SmartCalculatorApp(
                     onDynamicColorChange = onDynamicColorChange,
                     onGroupDigitsChange = onGroupDigitsChange,
                     onHapticFeedbackChange = onHapticFeedbackChange,
+                    onCurrencySymbolChange = onCurrencySymbolChange,
                     onClearHistory = calculatorViewModel::onClearHistory,
                     onOpenLegal = { legalDocumentName = it.name },
                 )

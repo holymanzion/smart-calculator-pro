@@ -15,19 +15,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.holymanzion.calculator.tools.DiscountCalculator
 import com.holymanzion.calculator.ui.components.ChipSelector
+import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.NumberField
 import com.holymanzion.calculator.ui.components.ResultCard
 import com.holymanzion.calculator.ui.components.ResultDivider
 import com.holymanzion.calculator.ui.components.ResultRow
 import com.holymanzion.calculator.ui.components.ToolNote
 import com.holymanzion.calculator.ui.components.ToolScaffold
-import com.holymanzion.calculator.ui.components.formatMoney
-import com.holymanzion.calculator.ui.components.formatNumber
 
 private val QUICK_DISCOUNTS = listOf(5, 10, 15, 20, 25, 30, 40, 50, 70)
 
 @Composable
 fun DiscountScreen(onOpenMenu: () -> Unit) {
+    val format = LocalToolFormat.current
     var price by rememberSaveable { mutableStateOf("") }
     var discount by rememberSaveable { mutableStateOf("20") }
     var extraDiscount by rememberSaveable { mutableStateOf("") }
@@ -96,20 +96,20 @@ fun DiscountScreen(onOpenMenu: () -> Unit) {
             } else {
                 ResultRow(
                     label = "You pay",
-                    value = formatMoney(result.finalPrice),
+                    value = format.money(result.finalPrice),
                     emphasised = true,
                 )
                 ResultDivider()
-                ResultRow(label = "Original price", value = formatMoney(priceValue))
-                ResultRow(label = "Price after discount", value = formatMoney(result.discountedPrice))
+                ResultRow(label = "Original price", value = format.money(priceValue))
+                ResultRow(label = "Price after discount", value = format.money(result.discountedPrice))
                 if (result.taxAmount > 0) {
-                    ResultRow(label = "Tax added", value = formatMoney(result.taxAmount))
+                    ResultRow(label = "Tax added", value = format.money(result.taxAmount))
                 }
                 ResultDivider()
-                ResultRow(label = "You save", value = formatMoney(result.youSave))
+                ResultRow(label = "You save", value = format.money(result.youSave))
                 ResultRow(
                     label = "Effective discount",
-                    value = "${formatNumber(result.effectiveDiscountPercent, maxDecimals = 2)}%",
+                    value = "${format.number(result.effectiveDiscountPercent, maxDecimals = 2)}%",
                 )
             }
         }

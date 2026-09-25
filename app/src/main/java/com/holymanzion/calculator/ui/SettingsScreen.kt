@@ -38,6 +38,10 @@ import com.holymanzion.calculator.BuildConfig
 import com.holymanzion.calculator.data.AppSettings
 import com.holymanzion.calculator.data.ThemeMode
 import com.holymanzion.calculator.ui.components.ChipSelector
+import com.holymanzion.calculator.ui.components.defaultCurrencySymbol
+
+/** A short list of widely used symbols, offered alongside the device's own. */
+private val CURRENCY_SYMBOLS = listOf("$", "€", "£", "₵", "₦", "₹", "¥", "R", "KSh")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,6 +53,7 @@ fun SettingsScreen(
     onDynamicColorChange: (Boolean) -> Unit,
     onGroupDigitsChange: (Boolean) -> Unit,
     onHapticFeedbackChange: (Boolean) -> Unit,
+    onCurrencySymbolChange: (String?) -> Unit,
     onClearHistory: () -> Unit,
     onOpenLegal: (LegalDocument) -> Unit,
 ) {
@@ -106,6 +111,30 @@ fun SettingsScreen(
                     subtitle = "Vibrate on key press",
                     checked = settings.hapticFeedback,
                     onCheckedChange = onHapticFeedbackChange,
+                )
+            }
+
+            SettingsSection("Currency") {
+                SettingsLabel("Symbol shown by the money tools")
+                val auto = remember { defaultCurrencySymbol() }
+                // null = follow the device locale, "" = no symbol; the rest are literals.
+                val choices = remember(auto) {
+                    listOf<String?>(null, "") + CURRENCY_SYMBOLS.filter { it != auto }
+                }
+                val labels = remember(auto, choices) {
+                    choices.map {
+                        when (it) {
+                            null -> if (auto.isEmpty()) "Automatic" else "Automatic ($auto)"
+                            "" -> "None"
+                            else -> it
+                        }
+                    }
+                }
+                ChipSelector(
+                    options = labels,
+                    selectedIndex = choices.indexOf(settings.currencySymbol),
+                    onSelect = { onCurrencySymbolChange(choices[it]) },
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
 

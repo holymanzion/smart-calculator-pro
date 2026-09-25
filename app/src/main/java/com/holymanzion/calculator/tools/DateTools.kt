@@ -68,7 +68,12 @@ object DateCalculator {
     fun age(birthDate: LocalDate, on: LocalDate = LocalDate.now()): Difference =
         between(birthDate, on)
 
-    /** Days until the next anniversary of [date], or 0 when it is today. */
+    /**
+     * Days until the next anniversary of [date], or 0 when it is today.
+     *
+     * A 29 February date is handled by `withYear`, which clamps to 28 February in a
+     * non-leap year rather than throwing.
+     */
     fun daysUntilNextAnniversary(date: LocalDate, from: LocalDate = LocalDate.now()): Long {
         var next = date.withYear(from.year)
         if (next.isBefore(from)) next = next.plusYears(1)

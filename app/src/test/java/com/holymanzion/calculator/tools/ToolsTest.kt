@@ -176,6 +176,28 @@ class ToolsTest {
         assertNull(PercentageCalculator.change(0.0, 10.0))
     }
 
+    @Test
+    fun `adjusting by a percentage applies the change to the value`() {
+        assertClose(120.0, PercentageCalculator.adjustBy(100.0, 20.0))
+        assertClose(64.0, PercentageCalculator.adjustBy(80.0, -20.0))
+        assertClose(100.0, PercentageCalculator.adjustBy(100.0, 0.0))
+    }
+
+    @Test
+    fun `adjusting by a percentage is not the same as a percentage of`() {
+        // 20% off 80 is 64, not 16 — the mistake this mode exists to prevent.
+        val adjusted = PercentageCalculator.adjustBy(80.0, -20.0)
+        val portion = PercentageCalculator.percentOf(20.0, 80.0)
+        assertClose(64.0, adjusted)
+        assertClose(16.0, portion)
+    }
+
+    @Test
+    fun `an increase then an equal decrease does not return to the start`() {
+        val up = PercentageCalculator.adjustBy(100.0, 50.0)
+        assertClose(75.0, PercentageCalculator.adjustBy(up, -50.0))
+    }
+
     // ---- dates -----------------------------------------------------------
 
     @Test
@@ -225,6 +247,34 @@ class ToolsTest {
     fun `shifting by weeks and days combines`() {
         val result = DateCalculator.shift(LocalDate.of(2026, 1, 1), weeks = 2, days = 3)
         assertEquals(LocalDate.of(2026, 1, 18), result)
+    }
+
+    @Test
+    fun `age counts completed years`() {
+        val birth = LocalDate.of(1996, 6, 15)
+
+        // The day before the birthday is still the previous age.
+        assertEquals(29, DateCalculator.age(birth, LocalDate.of(2026, 6, 14)).years)
+        assertEquals(30, DateCalculator.age(birth, LocalDate.of(2026, 6, 15)).years)
+        assertEquals(30, DateCalculator.age(birth, LocalDate.of(2026, 6, 16)).years)
+    }
+
+    @Test
+    fun `days until the next birthday`() {
+        val birth = LocalDate.of(1996, 6, 15)
+
+        assertEquals(0L, DateCalculator.daysUntilNextAnniversary(birth, LocalDate.of(2026, 6, 15)))
+        assertEquals(1L, DateCalculator.daysUntilNextAnniversary(birth, LocalDate.of(2026, 6, 14)))
+        // The day after, it rolls round to next year.
+        assertEquals(364L, DateCalculator.daysUntilNextAnniversary(birth, LocalDate.of(2026, 6, 16)))
+    }
+
+    @Test
+    fun `a leap day birthday does not throw in a common year`() {
+        val leapling = LocalDate.of(2000, 2, 29)
+        // 2026 has no 29 February; withYear clamps rather than failing.
+        val days = DateCalculator.daysUntilNextAnniversary(leapling, LocalDate.of(2026, 1, 1))
+        assertEquals(58L, days)
     }
 
     // ---- bmi -------------------------------------------------------------

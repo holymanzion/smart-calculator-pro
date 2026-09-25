@@ -11,16 +11,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.ImeAction
 import com.holymanzion.calculator.tools.PercentageCalculator
 import com.holymanzion.calculator.ui.components.ChipSelector
+import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.NumberField
 import com.holymanzion.calculator.ui.components.ResultCard
 import com.holymanzion.calculator.ui.components.ResultDivider
 import com.holymanzion.calculator.ui.components.ResultRow
 import com.holymanzion.calculator.ui.components.ToolNote
 import com.holymanzion.calculator.ui.components.ToolScaffold
-import com.holymanzion.calculator.ui.components.formatNumber
 
 @Composable
 fun PercentageScreen(onOpenMenu: () -> Unit) {
+    val format = LocalToolFormat.current
     var modeIndex by rememberSaveable { mutableIntStateOf(0) }
     var first by rememberSaveable { mutableStateOf("") }
     var second by rememberSaveable { mutableStateOf("") }
@@ -33,6 +34,7 @@ fun PercentageScreen(onOpenMenu: () -> Unit) {
         x == null || y == null -> null
         mode == PercentageCalculator.Mode.PercentOf -> PercentageCalculator.percentOf(x, y)
         mode == PercentageCalculator.Mode.WhatPercent -> PercentageCalculator.whatPercent(x, y)
+        mode == PercentageCalculator.Mode.AdjustBy -> PercentageCalculator.adjustBy(x, y)
         else -> PercentageCalculator.change(x, y)
     }
 
@@ -40,16 +42,18 @@ fun PercentageScreen(onOpenMenu: () -> Unit) {
         PercentageCalculator.Mode.PercentOf -> "Percentage (X)"
         PercentageCalculator.Mode.WhatPercent -> "Part (X)"
         PercentageCalculator.Mode.Change -> "Starting value"
+        PercentageCalculator.Mode.AdjustBy -> "Value"
     }
     val secondLabel = when (mode) {
         PercentageCalculator.Mode.PercentOf -> "Of value (Y)"
         PercentageCalculator.Mode.WhatPercent -> "Whole (Y)"
         PercentageCalculator.Mode.Change -> "Ending value"
+        PercentageCalculator.Mode.AdjustBy -> "Change by (negative to reduce)"
     }
 
     ToolScaffold(title = "Percentage", onOpenMenu = onOpenMenu) {
         ChipSelector(
-            options = listOf("X% of Y", "X is what % of Y", "% change"),
+            options = listOf("X% of Y", "X is what % of Y", "% change", "Add / subtract %"),
             selectedIndex = modeIndex,
             onSelect = { modeIndex = it },
         )
@@ -72,6 +76,7 @@ fun PercentageScreen(onOpenMenu: () -> Unit) {
             value = second,
             onValueChange = { second = it },
             label = secondLabel,
+            suffix = if (mode == PercentageCalculator.Mode.AdjustBy) "%" else null,
             allowNegative = true,
             imeAction = ImeAction.Done,
         )
@@ -95,19 +100,33 @@ fun PercentageScreen(onOpenMenu: () -> Unit) {
                 )
 
                 else -> {
-                    val suffix = if (mode == PercentageCalculator.Mode.PercentOf) "" else "%"
+                    val bare = mode == PercentageCalculator.Mode.PercentOf ||
+                        mode == PercentageCalculator.Mode.AdjustBy
                     ResultRow(
                         label = "Answer",
-                        value = "${formatNumber(answer, maxDecimals = 4)}$suffix",
+                        value = format.number(answer, maxDecimals = 4) + if (bare) "" else "%",
                         emphasised = true,
                     )
 
-                    if (mode == PercentageCalculator.Mode.Change) {
-                        ResultDivider()
-                        ResultRow(
-                            label = if (answer >= 0) "Increase" else "Decrease",
-                            value = formatNumber(kotlin.math.abs(y - x), maxDecimals = 4),
-                        )
+                    when (mode) {
+                        PercentageCalculator.Mode.Change -> {
+                            ResultDivider()
+                            ResultRow(
+                                label = if (answer >= 0) "Increase" else "Decrease",
+                                value = format.number(kotlin.math.abs(y - x), maxDecimals = 4),
+                            )
+                        }
+
+                        PercentageCalculator.Mode.AdjustBy -> {
+                            ResultDivider()
+                            ResultRow(label = "Started from", value = format.number(x, 4))
+                            ResultRow(
+                                label = if (y >= 0) "Added" else "Removed",
+                                value = format.number(kotlin.math.abs(answer - x), 4),
+                            )
+                        }
+
+                        else -> Unit
                     }
                 }
             }

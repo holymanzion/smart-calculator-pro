@@ -49,6 +49,7 @@ fun DateScreen(onOpenMenu: () -> Unit) {
     var startEpochDay by rememberSaveable { mutableLongStateOf(today.toEpochDay()) }
     var endEpochDay by rememberSaveable { mutableLongStateOf(today.plusDays(30).toEpochDay()) }
     var baseEpochDay by rememberSaveable { mutableLongStateOf(today.toEpochDay()) }
+    var birthEpochDay by rememberSaveable { mutableLongStateOf(today.minusYears(30).toEpochDay()) }
 
     var years by rememberSaveable { mutableStateOf("") }
     var months by rememberSaveable { mutableStateOf("") }
@@ -61,7 +62,7 @@ fun DateScreen(onOpenMenu: () -> Unit) {
 
     ToolScaffold(title = "Date Calculator", onOpenMenu = onOpenMenu) {
         ChipSelector(
-            options = listOf("Difference", "Add or subtract"),
+            options = listOf("Difference", "Add or subtract", "Age"),
             selectedIndex = modeIndex,
             onSelect = { modeIndex = it },
         )
@@ -102,6 +103,48 @@ fun DateScreen(onOpenMenu: () -> Unit) {
             ToolNote(
                 "The two readings differ because calendar months vary in length. " +
                     "The day count is exact; the years/months breakdown follows the calendar.",
+            )
+        } else if (modeIndex == 2) {
+            val birth = LocalDate.ofEpochDay(birthEpochDay)
+            val age = DateCalculator.age(birth, today)
+            val untilBirthday = DateCalculator.daysUntilNextAnniversary(birth, today)
+
+            DateField("Date of birth", birth, formatter) { birthEpochDay = it.toEpochDay() }
+
+            ResultCard {
+                if (birth.isAfter(today)) {
+                    Text(
+                        text = "That date is in the future.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                } else {
+                    ResultRow(
+                        label = "Age",
+                        value = "${age.years} years",
+                        emphasised = true,
+                    )
+                    ResultDivider()
+                    ResultRow(
+                        label = "Exactly",
+                        value = "${age.years}y ${age.months}m ${age.days}d",
+                    )
+                    ResultRow(label = "Total days lived", value = "${age.totalDays}")
+                    ResultRow(label = "Total weeks", value = "${age.weeks}")
+                    ResultRow(
+                        label = "Next birthday",
+                        value = when (untilBirthday) {
+                            0L -> "Today"
+                            1L -> "Tomorrow"
+                            else -> "in $untilBirthday days"
+                        },
+                    )
+                }
+            }
+
+            ToolNote(
+                "Age counts completed years, which is how age is normally reckoned — " +
+                    "you are 29 until the day of your 30th birthday.",
             )
         } else {
             val base = LocalDate.ofEpochDay(baseEpochDay)

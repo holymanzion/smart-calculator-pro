@@ -82,6 +82,9 @@ class CalculatorPreferences(context: Context) {
             dynamicColor = prefs.getBoolean(KEY_DYNAMIC_COLOR, defaults.dynamicColor),
             groupDigits = prefs.getBoolean(KEY_GROUP_DIGITS, defaults.groupDigits),
             hapticFeedback = prefs.getBoolean(KEY_HAPTICS, defaults.hapticFeedback),
+            // Absent means "follow the locale", which is distinct from a stored
+            // empty string meaning "no symbol", so getString's null is meaningful.
+            currencySymbol = prefs.getString(KEY_CURRENCY, null),
         )
     }
 
@@ -91,6 +94,7 @@ class CalculatorPreferences(context: Context) {
             putBoolean(KEY_DYNAMIC_COLOR, settings.dynamicColor)
             putBoolean(KEY_GROUP_DIGITS, settings.groupDigits)
             putBoolean(KEY_HAPTICS, settings.hapticFeedback)
+            putString(KEY_CURRENCY, settings.currencySymbol)
         }
     }
 
@@ -108,6 +112,7 @@ class CalculatorPreferences(context: Context) {
         private const val KEY_DYNAMIC_COLOR = "dynamic_color"
         private const val KEY_GROUP_DIGITS = "group_digits"
         private const val KEY_HAPTICS = "haptics"
+        private const val KEY_CURRENCY = "currency_symbol"
 
         private const val FIELD_EXPRESSION = "expression"
         private const val FIELD_RESULT = "result"

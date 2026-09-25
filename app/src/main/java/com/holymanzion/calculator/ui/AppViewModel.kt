@@ -50,6 +50,9 @@ class AppViewModel(
 
     fun onHapticFeedbackChange(enabled: Boolean) = update { it.copy(hapticFeedback = enabled) }
 
+    /** @param symbol null follows the device locale; empty shows no symbol at all. */
+    fun onCurrencySymbolChange(symbol: String?) = update { it.copy(currencySymbol = symbol) }
+
     private fun update(transform: (AppSettings) -> AppSettings) {
         val updated = transform(_settings.value)
         _settings.value = updated

@@ -16,17 +16,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.holymanzion.calculator.tools.LoanCalculator
 import com.holymanzion.calculator.ui.components.ChipSelector
+import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.NumberField
 import com.holymanzion.calculator.ui.components.ResultCard
 import com.holymanzion.calculator.ui.components.ResultDivider
 import com.holymanzion.calculator.ui.components.ResultRow
 import com.holymanzion.calculator.ui.components.ToolNote
 import com.holymanzion.calculator.ui.components.ToolScaffold
-import com.holymanzion.calculator.ui.components.formatMoney
-import com.holymanzion.calculator.ui.components.formatNumber
 
 @Composable
 fun LoanScreen(onOpenMenu: () -> Unit) {
+    val format = LocalToolFormat.current
     var principal by rememberSaveable { mutableStateOf("") }
     var rate by rememberSaveable { mutableStateOf("") }
     var term by rememberSaveable { mutableStateOf("") }
@@ -86,19 +86,19 @@ fun LoanScreen(onOpenMenu: () -> Unit) {
             } else {
                 ResultRow(
                     label = "Monthly payment",
-                    value = formatMoney(result.monthlyPayment),
+                    value = format.money(result.monthlyPayment),
                     emphasised = true,
                 )
                 ResultDivider()
-                ResultRow(label = "Principal", value = formatMoney(principalValue))
-                ResultRow(label = "Total interest", value = formatMoney(result.totalInterest))
-                ResultRow(label = "Total payable", value = formatMoney(result.totalPayable))
+                ResultRow(label = "Principal", value = format.money(principalValue))
+                ResultRow(label = "Total interest", value = format.money(result.totalInterest))
+                ResultRow(label = "Total payable", value = format.money(result.totalPayable))
                 ResultDivider()
                 ResultRow(label = "Number of payments", value = "$months")
                 if (result.totalPayable > 0 && principalValue != null && principalValue > 0) {
                     ResultRow(
                         label = "Interest as % of loan",
-                        value = "${formatNumber(result.totalInterest / principalValue * 100, 1)}%",
+                        value = "${format.number(result.totalInterest / principalValue * 100, 1)}%",
                     )
                 }
             }

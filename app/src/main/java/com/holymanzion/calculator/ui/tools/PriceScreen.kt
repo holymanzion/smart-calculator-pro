@@ -17,18 +17,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.holymanzion.calculator.tools.PriceCalculator
 import com.holymanzion.calculator.ui.components.ChipSelector
+import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.NumberField
 import com.holymanzion.calculator.ui.components.ResultCard
 import com.holymanzion.calculator.ui.components.ResultDivider
 import com.holymanzion.calculator.ui.components.ResultRow
 import com.holymanzion.calculator.ui.components.ToolNote
 import com.holymanzion.calculator.ui.components.ToolScaffold
-import com.holymanzion.calculator.ui.components.formatMoney
 
 private val QUICK_TIPS = listOf(0, 5, 10, 12, 15, 18, 20, 25)
 
 @Composable
 fun PriceScreen(onOpenMenu: () -> Unit) {
+    val format = LocalToolFormat.current
     var amount by rememberSaveable { mutableStateOf("") }
     var taxPercent by rememberSaveable { mutableStateOf("") }
     var tipPercent by rememberSaveable { mutableStateOf("10") }
@@ -112,15 +113,15 @@ fun PriceScreen(onOpenMenu: () -> Unit) {
             } else {
                 ResultRow(
                     label = if (headCount > 1) "Each person pays" else "Total",
-                    value = formatMoney(result.perPerson),
+                    value = format.money(result.perPerson),
                     emphasised = true,
                 )
                 ResultDivider()
-                ResultRow(label = "Subtotal", value = formatMoney(result.subtotal))
-                ResultRow(label = "Tax", value = formatMoney(result.taxAmount))
-                ResultRow(label = "Tip", value = formatMoney(result.tipAmount))
+                ResultRow(label = "Subtotal", value = format.money(result.subtotal))
+                ResultRow(label = "Tax", value = format.money(result.taxAmount))
+                ResultRow(label = "Tip", value = format.money(result.tipAmount))
                 ResultDivider()
-                ResultRow(label = "Total", value = formatMoney(result.total))
+                ResultRow(label = "Total", value = format.money(result.total))
                 if (headCount > 1) {
                     ResultRow(label = "Split between", value = "$headCount people")
                 }

@@ -16,16 +16,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.holymanzion.calculator.tools.BmiCalculator
 import com.holymanzion.calculator.ui.components.ChipSelector
+import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.NumberField
 import com.holymanzion.calculator.ui.components.ResultCard
 import com.holymanzion.calculator.ui.components.ResultDivider
 import com.holymanzion.calculator.ui.components.ResultRow
 import com.holymanzion.calculator.ui.components.ToolNote
 import com.holymanzion.calculator.ui.components.ToolScaffold
-import com.holymanzion.calculator.ui.components.formatNumber
 
 @Composable
 fun BmiScreen(onOpenMenu: () -> Unit) {
+    val format = LocalToolFormat.current
     /** 0 = metric (cm, kg), 1 = imperial (ft/in, lb). */
     var unitIndex by rememberSaveable { mutableIntStateOf(0) }
 
@@ -117,7 +118,7 @@ fun BmiScreen(onOpenMenu: () -> Unit) {
             } else {
                 ResultRow(
                     label = result.category.label,
-                    value = formatNumber(result.bmi, maxDecimals = 1),
+                    value = format.number(result.bmi, maxDecimals = 1),
                     emphasised = true,
                 )
                 ResultDivider()
@@ -125,11 +126,11 @@ fun BmiScreen(onOpenMenu: () -> Unit) {
                 ResultRow(
                     label = "Healthy weight for your height",
                     value = if (metric) {
-                        "${formatNumber(result.healthyMinKg, 1)} – " +
-                            "${formatNumber(result.healthyMaxKg, 1)} kg"
+                        "${format.number(result.healthyMinKg, 1)} – " +
+                            "${format.number(result.healthyMaxKg, 1)} kg"
                     } else {
-                        "${formatNumber(result.healthyMinKg / 0.45359237, 1)} – " +
-                            "${formatNumber(result.healthyMaxKg / 0.45359237, 1)} lb"
+                        "${format.number(result.healthyMinKg / 0.45359237, 1)} – " +
+                            "${format.number(result.healthyMaxKg / 0.45359237, 1)} lb"
                     },
                 )
             }
