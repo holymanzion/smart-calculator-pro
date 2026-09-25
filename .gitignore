@@ -9,6 +9,9 @@
 .cxx
 local.properties
 /app/build/
+
+# Kotlin compiler daemon session markers, written on every build.
+.kotlin/
 *.apk
 *.aab
 *.keystore
