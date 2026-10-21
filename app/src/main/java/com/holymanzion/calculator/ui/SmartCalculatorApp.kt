@@ -117,7 +117,7 @@ fun SmartCalculatorApp(
                             modifier = Modifier.padding(start = 28.dp, top = 24.dp, bottom = 4.dp),
                         )
                         Text(
-                            text = "Everything offline, nothing collected",
+                            text = "Nothing collected, nothing to sign up for",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(start = 28.dp, bottom = 16.dp),
