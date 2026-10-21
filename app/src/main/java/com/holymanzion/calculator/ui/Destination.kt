@@ -3,6 +3,7 @@ package com.holymanzion.calculator.ui
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.CurrencyExchange
 import androidx.compose.material.icons.filled.LocalOffer
 import androidx.compose.material.icons.filled.MonitorHeart
 import androidx.compose.material.icons.filled.Payments
@@ -33,6 +34,11 @@ enum class Destination(
         title = "Unit Converter",
         icon = Icons.Filled.SwapHoriz,
         description = "Length, mass, temperature and more",
+    ),
+    Currency(
+        title = "Currency",
+        icon = Icons.Filled.CurrencyExchange,
+        description = "Live rates, works offline",
     ),
     Discount(
         title = "Discount",

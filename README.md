@@ -3,8 +3,9 @@
 An offline Android calculator and everyday-tools app, built with Kotlin and Jetpack
 Compose (Material 3).
 
-The app requests **no permissions at all** — not even `INTERNET` — so it is incapable
-of sending anything anywhere. Policy pages:
+`INTERNET` is the only permission the app requests, used solely by the Currency tool to
+download published exchange rates. Nothing the user types is ever transmitted, and every
+other tool works with no connection. Policy pages:
 [Privacy Policy](docs/privacy_policy.html) · [Terms](docs/terms.html).
 
 ## The calculator
@@ -26,6 +27,7 @@ of sending anything anywhere. Policy pages:
 | Tool | What it does |
 | --- | --- |
 | **Unit Converter** | Ten categories — length, mass, temperature, area, volume, speed, time, digital storage, energy, pressure |
+| **Currency** | 160+ currencies, rates cached for offline use, plus a manual-rate mode |
 | **Discount** | Sale price, stacked discounts, tax, and the *effective* discount |
 | **Price & Bill** | Tax, tip (pre- or post-tax) and splitting between people |
 | **Loan / EMI** | Monthly repayment, total interest, total payable |

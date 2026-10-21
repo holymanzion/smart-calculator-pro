@@ -23,19 +23,21 @@ check it still does before you submit.
 ## Short description (80 characters max)
 
 ```
-Calculator, unit converter and everyday tools. Fully offline, zero tracking.
+Calculator, unit converter, currency and money tools. No ads, no tracking.
 ```
 
-*(75 characters.)*
+*(74 characters.)*
 
 ---
 
 ## Full description (4000 characters max)
 
 ```
-Smart Calculator Pro is a calculator and a box of everyday tools in one app — and it works entirely offline.
+Smart Calculator Pro is a calculator and a box of everyday tools in one app.
 
-It requests no permissions at all. Not even internet access. Android itself blocks the app from sending anything anywhere, so your numbers stay on your phone.
+Internet access is the only permission it asks for, and only the Currency tool uses it — to download published exchange rates. Nothing you type is ever sent anywhere. Every other tool works with no connection at all, and even the currency converter has a manual-rate mode for when you are offline.
+
+No advertising. No analytics. No trackers. No accounts.
 
 A CALCULATOR THAT SHOWS ITS WORKING
 
@@ -47,9 +49,11 @@ Type a whole expression and see it, instead of a running total that hides what y
 • Percent that matches expectations: 200 + 10% is 220, while 200 × 10% is 20
 • History that survives restarts — tap any entry to reuse its result
 
-EIGHT TOOLS BEYOND THE KEYPAD
+NINE TOOLS BEYOND THE KEYPAD
 
 Unit Converter — ten categories covering length, weight, temperature, area, volume, speed, time, digital storage, energy and pressure. Decimal and binary storage units are listed separately, so you can see why a 1 TB drive shows up as 931 GB.
+
+Currency — over 160 currencies at published mid-market rates, cached on your device so they keep working offline, with the date they were published always on screen. Prefer the rate your bank actually gives you? Type your own and it is used instead, with no connection needed.
 
 Discount — sale price, what you save, and the effective discount. Stacked discounts multiply rather than add: 20% off then a further 10% off is 28% off, not 30%.
 
@@ -78,6 +82,16 @@ There is nothing to sign up for, nothing to subscribe to, and nothing watching w
 
 ---
 
+## Release notes for v1.3 (500 characters max)
+
+```
+• New: Currency converter — 160+ currencies, rates cached so they work offline
+• Set your own exchange rate when the published one isn't what you get
+• Rates always show the date they were published
+```
+
+---
+
 ## Release notes (500 characters max)
 
 **For the closed-testing / production release of v1.2:**
@@ -102,8 +116,16 @@ Play asks this in Policy → App content → Data safety. Answer:
 | Is all of the user data collected by your app encrypted in transit? | *(not asked once you answer No above)* |
 | Do you provide a way for users to request that their data is deleted? | **No** — nothing is collected; local data is removed by clearing history or uninstalling |
 
-This is defensible and easy to verify: the app declares **no permissions** in its
-manifest, so it cannot reach the network at all.
+**Read this before answering, since v1.3 added a network call.** The Currency tool
+performs an HTTPS `GET` for a public rate table. It sends no account, no identifier and
+nothing the user typed — the amounts and currencies being converted never leave the
+device, because the whole table is downloaded and the arithmetic runs locally. So the
+app still collects and shares no user data.
+
+The one nuance: as with any request, the rate provider's servers see the device's IP
+address. Google does not treat a transient IP used only to serve a request as collected
+data, but you are the one signing the declaration — read the current Data safety
+guidance and satisfy yourself before submitting.
 
 ---
 

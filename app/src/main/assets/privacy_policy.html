@@ -69,8 +69,9 @@
 <p class="updated">Smart Calculator Pro &middot; Last updated 19 September 2026</p>
 
 <div class="callout">
-  <strong>In short:</strong> Smart Calculator Pro collects nothing, sends nothing and
-  has no internet access. Everything you type stays on your device.
+  <strong>In short:</strong> Smart Calculator Pro collects nothing about you. The only
+  thing it ever sends is a request for published exchange rates, and only when you use
+  the Currency tool. Nothing you type is ever transmitted.
 </div>
 
 <h2>1. Who this covers</h2>
@@ -91,13 +92,40 @@
   <li>crash reports or diagnostic telemetry.</li>
 </ul>
 
-<h2>3. Why it cannot send data anywhere</h2>
+<h2>3. The one network request the app makes</h2>
 <p>
-  The app does not request the Android <code>INTERNET</code> permission. Without it the
-  operating system blocks all network access, so the app is technically incapable of
-  transmitting your data — this is enforced by Android, not merely promised here. You
-  can verify this yourself in the app's permission list, which is empty.
+  <code>INTERNET</code> is the only permission the app requests, and it exists for a
+  single feature: the <strong>Currency</strong> tool, which downloads published
+  exchange rates.
 </p>
+<p>What that request does and does not involve:</p>
+<ul>
+  <li>
+    It is a plain <code>GET</code> for a public list of rates from
+    <a href="https://www.exchangerate-api.com">exchangerate-api.com</a>. It carries no
+    account, no identifier and nothing you have typed.
+  </li>
+  <li>
+    <strong>The amounts and currencies you convert are never sent.</strong> The whole
+    rate table is downloaded and the arithmetic happens on your device, so the provider
+    cannot see what you converted or how much.
+  </li>
+  <li>
+    As with any internet request, the provider's servers necessarily see your IP
+    address and the fact that a request was made. That is inherent to how the internet
+    works, and is governed by
+    <a href="https://www.exchangerate-api.com/terms">their terms</a>.
+  </li>
+  <li>
+    Rates are cached on your device and refreshed at most once every twelve hours, so
+    the request is infrequent.
+  </li>
+  <li>
+    <strong>Every other tool works with no connection at all.</strong> The calculator,
+    converter, discount, bill, loan, percentage, date and BMI tools never touch the
+    network. The Currency tool also has a manual-rate mode you can use entirely offline.
+  </li>
+</ul>
 
 <h2>4. What is stored on your device</h2>
 <p>The app saves a small amount of data locally so it behaves sensibly between sessions:</p>
@@ -122,8 +150,13 @@
 
 <h2>6. Third parties</h2>
 <p>
-  There are none. The app contains no advertising, no analytics SDK, no crash reporting
-  service, no social media integration and no third-party trackers of any kind.
+  The app contains <strong>no advertising, no analytics SDK, no crash reporting service,
+  no social media integration and no third-party trackers of any kind</strong>.
+</p>
+<p>
+  There is exactly one external service: the exchange rate provider described in
+  section 3, contacted only by the Currency tool and only to download public rates. It
+  receives no personal data from the app.
 </p>
 
 <h2>7. Children</h2>

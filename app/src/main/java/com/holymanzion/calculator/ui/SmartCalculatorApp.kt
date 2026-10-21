@@ -37,6 +37,7 @@ import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.ToolFormat
 import com.holymanzion.calculator.ui.components.defaultCurrencySymbol
 import com.holymanzion.calculator.ui.tools.BmiScreen
+import com.holymanzion.calculator.ui.tools.CurrencyScreen
 import com.holymanzion.calculator.ui.tools.DateScreen
 import com.holymanzion.calculator.ui.tools.DiscountScreen
 import com.holymanzion.calculator.ui.tools.LoanScreen
@@ -150,6 +151,7 @@ fun SmartCalculatorApp(
                 )
 
                 Destination.UnitConverter -> UnitConverterScreen(onOpenMenu = openMenu)
+                Destination.Currency -> CurrencyScreen(onOpenMenu = openMenu)
                 Destination.Discount -> DiscountScreen(onOpenMenu = openMenu)
                 Destination.Price -> PriceScreen(onOpenMenu = openMenu)
                 Destination.Loan -> LoanScreen(onOpenMenu = openMenu)

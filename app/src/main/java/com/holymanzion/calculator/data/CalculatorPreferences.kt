@@ -3,6 +3,8 @@ package com.holymanzion.calculator.data
 import android.content.Context
 import androidx.core.content.edit
 import com.holymanzion.calculator.core.AngleMode
+import com.holymanzion.calculator.tools.currency.CurrencyRates
+import com.holymanzion.calculator.tools.currency.RatesApi
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -72,6 +74,34 @@ class CalculatorPreferences(context: Context) {
         prefs.edit { putBoolean(KEY_SCIENTIFIC, enabled) }
     }
 
+    // ---- exchange rates --------------------------------------------------
+
+    /**
+     * Cached rates, or [CurrencyRates.EMPTY] when nothing has been fetched yet.
+     *
+     * The raw response body is stored verbatim and re-parsed on read, so the cache
+     * cannot drift from the parser: whatever the app can parse today it can parse
+     * from cache tomorrow.
+     */
+    fun loadRates(): CurrencyRates {
+        val body = prefs.getString(KEY_RATES_BODY, null) ?: return CurrencyRates.EMPTY
+        val parsed = try {
+            RatesApi.parse(body)
+        } catch (_: JSONException) {
+            null
+        } ?: return CurrencyRates.EMPTY
+
+        // parse() stamps "now" as the fetch time; restore the real one.
+        return parsed.copy(fetchedAtMillis = prefs.getLong(KEY_RATES_FETCHED_AT, 0L))
+    }
+
+    fun saveRates(body: String, fetchedAtMillis: Long) {
+        prefs.edit {
+            putString(KEY_RATES_BODY, body)
+            putLong(KEY_RATES_FETCHED_AT, fetchedAtMillis)
+        }
+    }
+
     // ---- app-wide settings -----------------------------------------------
 
     fun loadAppSettings(): AppSettings {
@@ -113,6 +143,8 @@ class CalculatorPreferences(context: Context) {
         private const val KEY_GROUP_DIGITS = "group_digits"
         private const val KEY_HAPTICS = "haptics"
         private const val KEY_CURRENCY = "currency_symbol"
+        private const val KEY_RATES_BODY = "rates_body"
+        private const val KEY_RATES_FETCHED_AT = "rates_fetched_at"
 
         private const val FIELD_EXPRESSION = "expression"
         private const val FIELD_RESULT = "result"
