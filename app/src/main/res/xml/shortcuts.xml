@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Long-press shortcuts on the launcher icon.
+
+    Each carries a `destination` extra naming a Destination enum constant, which
+    MainActivity reads once on start.
+
+    They use a namespaced action rather than an explicit targetPackage because the
+    debug build carries an applicationId suffix: a hardcoded package would point the
+    debug shortcuts at the release app, or at nothing.
+
+    Launchers show four or five, so these are the tools worth jumping straight to —
+    the calculator is already what tapping the icon opens.
+-->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="currency"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_currency"
+        android:shortcutShortLabel="@string/shortcut_currency_short"
+        android:shortcutLongLabel="@string/shortcut_currency_long">
+        <intent android:action="com.holymanzion.calculator.action.OPEN_TOOL">
+            <extra
+                android:name="destination"
+                android:value="Currency" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="unit_converter"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_units"
+        android:shortcutShortLabel="@string/shortcut_units_short"
+        android:shortcutLongLabel="@string/shortcut_units_long">
+        <intent android:action="com.holymanzion.calculator.action.OPEN_TOOL">
+            <extra
+                android:name="destination"
+                android:value="UnitConverter" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="discount"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_discount"
+        android:shortcutShortLabel="@string/shortcut_discount_short"
+        android:shortcutLongLabel="@string/shortcut_discount_long">
+        <intent android:action="com.holymanzion.calculator.action.OPEN_TOOL">
+            <extra
+                android:name="destination"
+                android:value="Discount" />
+        </intent>
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="number_base"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_base"
+        android:shortcutShortLabel="@string/shortcut_base_short"
+        android:shortcutLongLabel="@string/shortcut_base_long">
+        <intent android:action="com.holymanzion.calculator.action.OPEN_TOOL">
+            <extra
+                android:name="destination"
+                android:value="NumberBase" />
+        </intent>
+    </shortcut>
+
+</shortcuts>

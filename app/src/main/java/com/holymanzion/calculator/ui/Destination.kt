@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Percent
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material.icons.filled.Tag
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**
@@ -64,6 +65,11 @@ enum class Destination(
         title = "Date Calculator",
         icon = Icons.Filled.CalendarMonth,
         description = "Difference and date shifting",
+    ),
+    NumberBase(
+        title = "Number Base",
+        icon = Icons.Filled.Tag,
+        description = "Binary, octal, decimal, hex",
     ),
     Bmi(
         title = "BMI",

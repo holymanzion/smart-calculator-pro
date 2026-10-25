@@ -32,6 +32,20 @@ sealed interface CalcKey {
     data object ToggleSign : CalcKey
     data object ToggleSecond : CalcKey
     data object ToggleAngle : CalcKey
+
+    /** Replaces the stored value with the current one. */
+    data object MemoryStore : CalcKey
+
+    /** Adds the current value to the stored one. */
+    data object MemoryAdd : CalcKey
+
+    /** Subtracts the current value from the stored one. */
+    data object MemorySubtract : CalcKey
+
+    /** Inserts the stored value into the expression. */
+    data object MemoryRecall : CalcKey
+
+    data object MemoryClear : CalcKey
 }
 
 /** Visual weight of a key, resolved to theme colours in [CalcButton]. */

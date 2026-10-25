@@ -186,6 +186,23 @@ private fun scientificRows(state: CalculatorUiState): List<List<KeySpec>> {
     val inverse = state.secondFunction
 
     return listOf(
+        // Memory keys live here rather than on the basic pad: they are the classic
+        // calculator function the app was missing, but not one most people reach for
+        // often enough to spend prime keypad space on.
+        listOf(
+            KeySpec("MC", CalcKey.MemoryClear, KeyStyle.Function, R.string.cd_memory_clear),
+            KeySpec(
+                label = "MR",
+                key = CalcKey.MemoryRecall,
+                style = KeyStyle.Function,
+                contentDescription = R.string.cd_memory_recall,
+                // Highlighted while something is stored, so the pad shows its own state.
+                selected = state.memoryActive,
+            ),
+            KeySpec("M+", CalcKey.MemoryAdd, KeyStyle.Function, R.string.cd_memory_add),
+            KeySpec("M−", CalcKey.MemorySubtract, KeyStyle.Function, R.string.cd_memory_subtract),
+            KeySpec("MS", CalcKey.MemoryStore, KeyStyle.Function, R.string.cd_memory_store),
+        ),
         listOf(
             KeySpec(
                 label = "2nd",

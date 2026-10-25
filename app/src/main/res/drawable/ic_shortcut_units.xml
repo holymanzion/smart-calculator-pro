@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Two opposed arrows: the conventional "convert between" mark. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <path
+        android:fillColor="#FF6750A4"
+        android:pathData="M24,24m-24,0a24,24 0 1,0 48,0a24,24 0 1,0 -48,0" />
+
+    <!-- Upper arrow, pointing right -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M13,18 h17 v-4 l7,6 -7,6 v-4 h-17 z" />
+
+    <!-- Lower arrow, pointing left -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M35,30 h-17 v-4 l-7,6 7,6 v-4 h17 z" />
+</vector>

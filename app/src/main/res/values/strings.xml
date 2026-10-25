@@ -30,6 +30,11 @@
     <string name="cd_pi">Pi</string>
     <string name="cd_euler">Euler\'s number</string>
     <string name="cd_answer">Previous answer</string>
+    <string name="cd_memory_clear">Clear memory</string>
+    <string name="cd_memory_recall">Recall memory</string>
+    <string name="cd_memory_add">Add to memory</string>
+    <string name="cd_memory_subtract">Subtract from memory</string>
+    <string name="cd_memory_store">Store in memory</string>
     <string name="cd_square_root">Square root</string>
     <string name="cd_cube_root">Cube root</string>
     <string name="cd_exponent">Exponent</string>
@@ -38,6 +43,16 @@
     <string name="cd_log">Logarithm base ten</string>
     <string name="cd_power_of_ten">Ten to the power</string>
     <string name="cd_exp_function">E to the power</string>
+
+    <!-- Launcher long-press shortcuts. Short labels are clipped near ~10 characters. -->
+    <string name="shortcut_currency_short">Currency</string>
+    <string name="shortcut_currency_long">Convert currency</string>
+    <string name="shortcut_units_short">Units</string>
+    <string name="shortcut_units_long">Convert units</string>
+    <string name="shortcut_discount_short">Discount</string>
+    <string name="shortcut_discount_long">Work out a discount</string>
+    <string name="shortcut_base_short">Base</string>
+    <string name="shortcut_base_long">Convert number base</string>
 
     <string name="error_syntax">Syntax error</string>
     <string name="error_division_by_zero">Cannot divide by zero</string>

@@ -36,6 +36,7 @@ import com.holymanzion.calculator.data.ThemeMode
 import com.holymanzion.calculator.ui.components.LocalToolFormat
 import com.holymanzion.calculator.ui.components.ToolFormat
 import com.holymanzion.calculator.ui.components.defaultCurrencySymbol
+import com.holymanzion.calculator.ui.tools.BaseConverterScreen
 import com.holymanzion.calculator.ui.tools.BmiScreen
 import com.holymanzion.calculator.ui.tools.CurrencyScreen
 import com.holymanzion.calculator.ui.tools.DateScreen
@@ -55,6 +56,8 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun SmartCalculatorApp(
+    /** Screen to open on launch, from a launcher shortcut. Null starts on the calculator. */
+    startDestination: Destination? = null,
     settings: AppSettings,
     onThemeModeChange: (ThemeMode) -> Unit,
     onDynamicColorChange: (Boolean) -> Unit,
@@ -65,7 +68,11 @@ fun SmartCalculatorApp(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    var destinationName by rememberSaveable { mutableStateOf(Destination.Calculator.name) }
+    // rememberSaveable seeds from the shortcut only on first composition, so a
+    // rotation keeps wherever the user has since navigated to.
+    var destinationName by rememberSaveable {
+        mutableStateOf((startDestination ?: Destination.Calculator).name)
+    }
     val destination = Destination.valueOf(destinationName)
 
     var legalDocumentName by rememberSaveable { mutableStateOf<String?>(null) }
@@ -157,6 +164,7 @@ fun SmartCalculatorApp(
                 Destination.Loan -> LoanScreen(onOpenMenu = openMenu)
                 Destination.Percentage -> PercentageScreen(onOpenMenu = openMenu)
                 Destination.DateTools -> DateScreen(onOpenMenu = openMenu)
+                Destination.NumberBase -> BaseConverterScreen(onOpenMenu = openMenu)
                 Destination.Bmi -> BmiScreen(onOpenMenu = openMenu)
 
                 Destination.Settings -> SettingsScreen(

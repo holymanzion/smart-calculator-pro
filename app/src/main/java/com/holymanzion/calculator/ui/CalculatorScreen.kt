@@ -188,6 +188,11 @@ private fun CalculatorViewModel.handle(key: CalcKey) {
         CalcKey.ToggleSign -> onToggleSign()
         CalcKey.ToggleSecond -> onToggleSecondFunction()
         CalcKey.ToggleAngle -> onToggleAngleMode()
+        CalcKey.MemoryStore -> onMemoryStore()
+        CalcKey.MemoryAdd -> onMemoryAdd()
+        CalcKey.MemorySubtract -> onMemorySubtract()
+        CalcKey.MemoryRecall -> onMemoryRecall()
+        CalcKey.MemoryClear -> onMemoryClear()
     }
 }
 

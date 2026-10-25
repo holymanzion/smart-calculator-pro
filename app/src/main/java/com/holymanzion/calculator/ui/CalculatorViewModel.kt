@@ -10,6 +10,7 @@ import com.holymanzion.calculator.core.AngleMode
 import com.holymanzion.calculator.core.CalcError
 import com.holymanzion.calculator.core.CalcResult
 import com.holymanzion.calculator.core.Calculator
+import com.holymanzion.calculator.core.Evaluator
 import com.holymanzion.calculator.core.ExpressionFormatter
 import com.holymanzion.calculator.core.NumberFormatter
 import com.holymanzion.calculator.data.CalculatorPreferences
@@ -40,6 +41,8 @@ data class CalculatorUiState(
     val historyVisible: Boolean = false,
     /** True while the display holds a result rather than something being typed. */
     val justEvaluated: Boolean = false,
+    /** Something is stored in memory, which the MR key reflects. */
+    val memoryActive: Boolean = false,
 )
 
 class CalculatorViewModel(
@@ -54,6 +57,9 @@ class CalculatorViewModel(
 
     /** Mirrors the app-wide setting; see [setGroupDigits]. */
     private var groupDigits: Boolean = true
+
+    /** The memory register behind the MC/MR/M+/M−/MS keys. */
+    private var memory: BigDecimal = BigDecimal.ZERO
 
     init {
         viewModelScope.launch {
@@ -274,6 +280,51 @@ class CalculatorViewModel(
     fun onClearHistory() {
         _state.update { it.copy(history = emptyList()) }
         viewModelScope.launch(Dispatchers.IO) { preferences.saveHistory(emptyList()) }
+    }
+
+    // ---- memory ----------------------------------------------------------
+
+    /**
+     * The value the memory keys operate on.
+     *
+     * Evaluates whatever is on screen, so `M+` works on a typed expression and not
+     * only on an already-computed result. Returns null for anything incomplete, and
+     * the memory keys then do nothing rather than storing a wrong number silently.
+     */
+    private fun currentValue(): BigDecimal? {
+        val expression = _state.value.expression
+        if (expression.isBlank()) return null
+        return when (val result = Calculator.evaluate(expression, _state.value.angleMode, ans)) {
+            is CalcResult.Success -> result.value
+            is CalcResult.Failure -> null
+        }
+    }
+
+    private fun setMemory(value: BigDecimal) {
+        memory = value
+        _state.update { it.copy(memoryActive = value.signum() != 0) }
+    }
+
+    fun onMemoryStore() {
+        currentValue()?.let { setMemory(it) }
+    }
+
+    fun onMemoryAdd() {
+        currentValue()?.let { setMemory(memory.add(it, Evaluator.MC)) }
+    }
+
+    fun onMemorySubtract() {
+        currentValue()?.let { setMemory(memory.subtract(it, Evaluator.MC)) }
+    }
+
+    /** Inserts the stored value, following the same rules as recalling from history. */
+    fun onMemoryRecall() {
+        if (memory.signum() == 0) return
+        updateExpression(operandBase() + NumberFormatter.toExpressionText(memory))
+    }
+
+    fun onMemoryClear() {
+        setMemory(BigDecimal.ZERO)
     }
 
     /** Pulls a past result back into the expression. */
