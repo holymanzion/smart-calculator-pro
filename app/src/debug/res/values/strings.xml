@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Debug-only overrides. Android merges this over src/main for debug builds, so the
+    release listing is untouched and no Gradle wiring is needed.
+
+    The debug build installs alongside the release one (applicationIdSuffix ".debug"),
+    and with the same name and icon the two are indistinguishable in the launcher —
+    easy to test the wrong one.
+-->
+<resources>
+    <string name="app_name">Smart Calc (debug)</string>
+</resources>
