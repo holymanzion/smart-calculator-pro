@@ -82,13 +82,26 @@ There is nothing to sign up for, nothing to subscribe to, and nothing watching w
 
 ---
 
-## Release notes for v1.3 (500 characters max)
+## Release notes for v1.4 (500 characters max)
+
+**Covers v1.3 and v1.4 together.** v1.3 was built but never uploaded, so anyone on
+Play is coming from v1.2 and has seen none of it.
 
 ```
-• New: Currency converter — 160+ currencies, rates cached so they work offline
-• Set your own exchange rate when the published one isn't what you get
-• Rates always show the date they were published
+New in this update:
+
+• Currency converter — over 160 currencies at live rates, cached so they keep working offline. Or set your own rate.
+
+• Number base converter — binary, octal, decimal and hex side by side, with the bit width.
+
+• Memory keys (MC, MR, M+, M−, MS) on the scientific keypad.
+
+• Long-press the app icon to jump straight to Currency, Units, Discount or Number Base.
+
+• Long-press any result to copy it, and choose the currency symbol the money tools use.
 ```
+
+*(486 characters.)*
 
 ---
 
