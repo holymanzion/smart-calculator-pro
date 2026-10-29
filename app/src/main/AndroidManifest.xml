@@ -18,6 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Calculator">
 
+        <!--
+            AdMob application id, supplied per build type. The SDK throws at startup if
+            this is missing, so it is a placeholder rather than an optional extra.
+            The AD_ID permission is merged in by the ads SDK itself.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="${admobAppId}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

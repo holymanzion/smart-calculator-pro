@@ -19,6 +19,31 @@ val keystoreProperties = Properties().apply {
 }
 val hasReleaseKeystore = keystorePropertiesFile.exists()
 
+/*
+ * AdMob identifiers.
+ *
+ * Real ids live in admob.properties, which is git-ignored, and fall back to Google's
+ * published test ids when it is absent — same arrangement as the signing config, so a
+ * fresh clone still builds.
+ *
+ * The fallback is not a convenience, it is a safety rule: requesting *live* ads from
+ * your own device during development is invalid traffic, and AdMob suspends accounts
+ * for it. Debug builds therefore always use the test ids regardless of the file.
+ */
+val admobPropertiesFile = rootProject.file("admob.properties")
+val admobProperties = Properties().apply {
+    if (admobPropertiesFile.exists()) {
+        admobPropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+val testAdmobAppId = "ca-app-pub-3940256099942544~3347511713"
+val testAdmobBannerId = "ca-app-pub-3940256099942544/6300978111"
+
+val releaseAdmobAppId = admobProperties.getProperty("appId") ?: testAdmobAppId
+val releaseAdmobBannerId = admobProperties.getProperty("bannerUnitId") ?: testAdmobBannerId
+val releaseUsesTestAds = admobProperties.getProperty("appId") == null
+
 android {
     namespace = "com.holymanzion.calculator"
     compileSdk = 36
@@ -27,8 +52,8 @@ android {
         applicationId = "com.holymanzion.calculator"
         minSdk = 24
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.4"
+        versionCode = 6
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -49,10 +74,19 @@ android {
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
+
+            // Never the live ids here: see the note above admobPropertiesFile.
+            manifestPlaceholders["admobAppId"] = testAdmobAppId
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$testAdmobBannerId\"")
+            buildConfigField("boolean", "ADMOB_TEST_IDS", "true")
         }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+
+            manifestPlaceholders["admobAppId"] = releaseAdmobAppId
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$releaseAdmobBannerId\"")
+            buildConfigField("boolean", "ADMOB_TEST_IDS", "$releaseUsesTestAds")
 
             // Compose pulls in prebuilt native libraries (androidx.graphics:graphics-path).
             // Shipping their symbol table makes any native crash readable in Play Console
@@ -136,6 +170,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
+
+    // AdMob, plus Google's consent SDK. UMP is not optional: without a consent flow
+    // the EEA/UK traffic either serves nothing or breaches GDPR.
+    implementation(libs.play.services.ads)
+    implementation(libs.user.messaging.platform)
 
     debugImplementation(libs.androidx.ui.tooling)
 

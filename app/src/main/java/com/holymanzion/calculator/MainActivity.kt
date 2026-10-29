@@ -6,6 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import com.holymanzion.calculator.ads.AdsConsent
+import com.holymanzion.calculator.ads.ProvideAdsEnabled
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holymanzion.calculator.data.ThemeMode
@@ -25,6 +28,13 @@ class MainActivity : ComponentActivity() {
         val startDestination = intent?.getStringExtra(EXTRA_DESTINATION)
             ?.let { name -> Destination.entries.firstOrNull { it.name == name } }
 
+        // Consent runs before any ad request. Until it resolves, adsEnabled stays
+        // false and the banner occupies no space, so the first frame is never delayed
+        // by it.
+        AdsConsent.gatherConsentAndInitialise(this) { canRequestAds ->
+            adsEnabled.value = canRequestAds
+        }
+
         setContent {
             val appViewModel: AppViewModel = viewModel(factory = AppViewModel.Factory)
             val settings by appViewModel.settings.collectAsStateWithLifecycle()
@@ -35,10 +45,13 @@ class MainActivity : ComponentActivity() {
                 ThemeMode.Dark -> true
             }
 
+            val adsOn by adsEnabled
+
             CalculatorTheme(
                 darkTheme = darkTheme,
                 dynamicColor = settings.dynamicColor,
             ) {
+                ProvideAdsEnabled(adsOn) {
                 SmartCalculatorApp(
                     startDestination = startDestination,
                     settings = settings,
@@ -48,9 +61,13 @@ class MainActivity : ComponentActivity() {
                     onHapticFeedbackChange = appViewModel::onHapticFeedbackChange,
                     onCurrencySymbolChange = appViewModel::onCurrencySymbolChange,
                 )
+                }
             }
         }
     }
+
+    /** Set once consent resolves; drives [LocalAdsEnabled]. */
+    private val adsEnabled = mutableStateOf(false)
 
     private companion object {
         /** Matches the extra name used in `res/xml/shortcuts.xml`. */

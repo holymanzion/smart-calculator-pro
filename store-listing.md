@@ -23,10 +23,10 @@ check it still does before you submit.
 ## Short description (80 characters max)
 
 ```
-Calculator, unit converter, currency and money tools. No ads, no tracking.
+Calculator, unit converter, currency and ten everyday tools in one app.
 ```
 
-*(74 characters.)*
+*(71 characters.)*
 
 ---
 
@@ -37,7 +37,7 @@ Smart Calculator Pro is a calculator and a box of everyday tools in one app.
 
 Internet access is the only permission it asks for, and only the Currency tool uses it — to download published exchange rates. Nothing you type is ever sent anywhere. Every other tool works with no connection at all, and even the currency converter has a manual-rate mode for when you are offline.
 
-No advertising. No analytics. No trackers. No accounts.
+Supported by banner ads on the tool screens. No analytics, no trackers, no accounts.
 
 A CALCULATOR THAT SHOWS ITS WORKING
 
@@ -75,7 +75,7 @@ BUILT TO STAY OUT OF THE WAY
 • Choose your currency symbol, or show none at all
 • Landscape layout with the full scientific keypad
 
-NO ADVERTISING. NO ANALYTICS. NO ACCOUNTS.
+NO ANALYTICS. NO ACCOUNTS. NOTHING YOU TYPE LEAVES YOUR DEVICE.
 
 There is nothing to sign up for, nothing to subscribe to, and nothing watching what you calculate.
 ```
@@ -125,20 +125,29 @@ Play asks this in Policy → App content → Data safety. Answer:
 
 | Question | Answer |
 | --- | --- |
-| Does your app collect or share any of the required user data types? | **No** |
-| Is all of the user data collected by your app encrypted in transit? | *(not asked once you answer No above)* |
-| Do you provide a way for users to request that their data is deleted? | **No** — nothing is collected; local data is removed by clearing history or uninstalling |
+| Does your app collect or share any of the required user data types? | **Yes** |
+| Which type? | **Device or other IDs → Device or other IDs** |
+| Collected or shared? | **Shared** (AdMob sends it to Google) |
+| Purpose | **Advertising or marketing** |
+| Is it required? | **Optional** — users in the EEA/UK consent, and the ad ID can be reset or deleted on-device |
+| Is data encrypted in transit? | **Yes** — all requests are HTTPS |
+| Can users request deletion? | **Yes** — resettable in Android Settings → Privacy → Ads |
 
-**Read this before answering, since v1.3 added a network call.** The Currency tool
-performs an HTTPS `GET` for a public rate table. It sends no account, no identifier and
-nothing the user typed — the amounts and currencies being converted never leave the
-device, because the whole table is downloaded and the arithmetic runs locally. So the
-app still collects and shares no user data.
+Declare **nothing else**. No app activity, no personal info, no location, no financial
+info: what the user calculates, converts or stores never leaves the device, and is
+never sent to AdMob or anyone else.
 
-The one nuance: as with any request, the rate provider's servers see the device's IP
-address. Google does not treat a transient IP used only to serve a request as collected
-data, but you are the one signing the declaration — read the current Data safety
-guidance and satisfy yourself before submitting.
+**This changed in v1.5.** Up to v1.4 the honest answer was "no data collected". Adding
+AdMob changes that: the advertising SDK shares a device identifier with Google, and
+that must be declared.
+
+What has *not* changed is everything the app itself does. The Currency tool downloads a
+public rate table and does the arithmetic locally, so the amounts being converted never
+leave the device. History and settings stay in the app's private storage. None of it is
+visible to advertisers.
+
+You are the one signing the declaration — read Google's current Data safety guidance
+and satisfy yourself before submitting rather than taking this table on trust.
 
 ---
 
@@ -161,7 +170,19 @@ no paywall and no gated feature.
 
 ## Ads
 
-Select **No, my app does not contain ads**.
+Select **Yes, my app contains ads**. The listing gains a "Contains ads" badge.
+
+## Advertising ID declaration
+
+Policy → App content → **Advertising ID** → **Yes**, the app uses advertising ID.
+Purpose: **Advertising or marketing**.
+
+The AdMob SDK merges `com.google.android.gms.permission.AD_ID` into the manifest, so
+the permission Console checks for is present from v1.5 onward.
+
+**Do not set this to Yes before the ads build is actually live.** Declaring ahead of
+shipping is what produced the "manifest doesn't include AD_ID" error: the declaration
+described an app that did not yet exist.
 
 ---
 

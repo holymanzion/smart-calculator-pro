@@ -52,6 +52,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.holymanzion.calculator.ads.BannerAd
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Currency
@@ -86,6 +87,13 @@ fun ToolScaffold(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             content()
+
+            // Tool screens have spare vertical space below the results card, so the
+            // banner goes here rather than on the calculator, whose keypad already
+            // fills the screen. It collapses to nothing when there is no ad.
+            Spacer(Modifier.height(16.dp))
+            BannerAd()
+
             // Breathing room so the last card clears the navigation bar.
             Spacer(Modifier.height(24.dp))
         }

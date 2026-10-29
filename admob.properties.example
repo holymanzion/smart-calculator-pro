@@ -1,0 +1,14 @@
+# Copy to `admob.properties` and fill in the ids from your AdMob account.
+# That file is git-ignored. When it is absent, release builds fall back to Google's
+# published test ids, so the project still builds from a fresh clone — it just will
+# not earn anything.
+#
+# Debug builds ALWAYS use the test ids, whatever is in here. Requesting live ads from
+# your own device is invalid traffic and AdMob suspends accounts for it.
+#
+# Get these from admob.google.com:
+#   Apps -> your app -> App settings           gives the App ID
+#   Apps -> your app -> Ad units -> Banner     gives the ad unit ID
+
+appId=ca-app-pub-0000000000000000~0000000000
+bannerUnitId=ca-app-pub-0000000000000000/0000000000

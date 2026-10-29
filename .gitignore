@@ -20,3 +20,6 @@ local.properties
 
 # Signing credentials — never commit these.
 keystore.properties
+
+# AdMob ids. Not secret as such, but account-specific.
+admob.properties
