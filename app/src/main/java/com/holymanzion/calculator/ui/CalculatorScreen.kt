@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holymanzion.calculator.R
+import com.holymanzion.calculator.ads.BannerAd
 import kotlinx.coroutines.launch
 
 @Composable
@@ -61,6 +62,9 @@ fun CalculatorScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.background,
+        // Anchored below the keypad. The keypad is weighted, so it gives up the
+        // banner's height rather than being pushed off screen.
+        bottomBar = { BannerAd() },
     ) { padding ->
         BoxWithConstraints(
             modifier = Modifier

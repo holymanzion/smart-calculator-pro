@@ -77,6 +77,10 @@ fun ToolScaffold(
                 },
             )
         },
+        // Anchored to the bottom rather than placed in the scrolling content, so it
+        // stays put while the tool is used. Scaffold also handles the navigation-bar
+        // inset for us, which a hand-rolled Column would get wrong.
+        bottomBar = { BannerAd() },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -87,14 +91,7 @@ fun ToolScaffold(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             content()
-
-            // Tool screens have spare vertical space below the results card, so the
-            // banner goes here rather than on the calculator, whose keypad already
-            // fills the screen. It collapses to nothing when there is no ad.
-            Spacer(Modifier.height(16.dp))
-            BannerAd()
-
-            // Breathing room so the last card clears the navigation bar.
+            // Breathing room so the last card clears the banner.
             Spacer(Modifier.height(24.dp))
         }
     }

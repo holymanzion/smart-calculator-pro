@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.holymanzion.calculator.BuildConfig
+import com.holymanzion.calculator.ads.BannerAd
 import com.holymanzion.calculator.data.AppSettings
 import com.holymanzion.calculator.data.ThemeMode
 import com.holymanzion.calculator.ui.components.ChipSelector
@@ -70,6 +71,7 @@ fun SettingsScreen(
                 },
             )
         },
+        bottomBar = { BannerAd() },
     ) { padding ->
         Column(
             modifier = Modifier
