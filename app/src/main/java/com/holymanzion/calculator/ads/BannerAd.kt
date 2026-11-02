@@ -2,6 +2,7 @@ package com.holymanzion.calculator.ads
 
 import android.content.Context
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -63,7 +64,12 @@ fun BannerAd(modifier: Modifier = Modifier) {
 
     AndroidView(
         factory = { adView },
-        modifier = modifier.fillMaxWidth(),
+        // The app draws edge to edge, and Scaffold does not inset a bottomBar for us —
+        // without this the banner renders underneath the system navigation bar and the
+        // back/home icons sit on top of the ad.
+        modifier = modifier
+            .fillMaxWidth()
+            .navigationBarsPadding(),
     )
 }
 
