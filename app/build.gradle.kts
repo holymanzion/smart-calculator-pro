@@ -52,8 +52,10 @@ android {
         applicationId = "com.holymanzion.calculator"
         minSdk = 24
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.5.1"
+        // Jumped clear of 1-9: a version code is consumed permanently across every
+        // track, so several earlier uploads burned the low numbers. Gaps are legal.
+        versionCode = 10
+        versionName = "1.5.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
